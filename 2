@@ -1,0 +1,35 @@
+# ------------- BLT IMPLEMENTATION -------------
+
+# Setup
+    li $8, 5
+    li $9, 10
+
+# First method: using 'slt' + 'bne'
+# blt $8, $9, label  <=>  slt $t0, $8, $9; bne $t0, $zero, label
+
+    slt $10, $8, $9     # $10 = 1 if $8 < $9
+    bne $10, $zero, LessThanLabel
+
+# Second method: using 'slt' + 'bgtz'
+# slt $t0, $8, $9; bgtz $t0, label
+
+    slt $11, $8, $9     # $11 = 1 if $8 < $9
+    bgtz $11, LessThanLabel2
+
+# Labels
+LessThanLabel:
+    # Code executed if $8 < $9
+    li $12, 1           # Set $12 = 1
+    j EndBLT
+
+LessThanLabel2:
+    li $13, 2           # Set $13 = 2
+
+EndBLT:
+    nop
+
+# Discussion:
+# Both versions use `slt` to set a flag register. Then, they use conditional branch:
+# - bne: compares result to zero
+# - bgtz: directly checks if result > 0
+# Performance: both are efficient (2 instructions), but `bgtz` can be more readable.
