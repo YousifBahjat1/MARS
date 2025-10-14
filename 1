@@ -1,0 +1,31 @@
+# ----------- ARRAY SQUARING PROGRAM ------------
+
+    .data
+input_array:    .word 1, 2, 3, 4
+output_array:   .space 16     # Reserve 4 words (4 * 4 bytes)
+
+    .text
+main:
+    la $t0, input_array    # Load base address of input array
+    la $t1, output_array   # Load base address of output array
+
+    li $t2, 0              # Loop counter
+
+loop:
+    lw $t3, 0($t0)         # Load input_array[i] into $t3
+    mul $t4, $t3, $t3      # Square it
+    sw $t4, 0($t1)         # Store in output_array[i]
+
+    addi $t0, $t0, 4       # Move to next input element
+    addi $t1, $t1, 4       # Move to next output element
+    addi $t2, $t2, 1       # Increment counter
+    li $t5, 4
+    blt $t2, $t5, loop     # Repeat for 4 elements
+
+end:
+    nop
+
+# Discussion:
+# - Efficient use of loop and memory addressing.
+# - `mul` is used to square.
+# - Could be optimized with loop unrolling, but this is clean and readable.
