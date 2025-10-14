@@ -1,0 +1,23 @@
+# ------------- MOVE IMPLEMENTATION -------------
+
+# First method: using 'add' with $zero
+# move $1, $2 is the same as: add $1, $2, $zero
+
+    .data
+    .text
+main:
+    li $2, 42          # Load 42 into $2
+    add $1, $2, $zero  # MOVE using ADD
+    # Now $1 = $2 = 42
+
+# Discussion:
+# Performance is optimal, since it's a single instruction with no branching or delay slots.
+
+# Second method: using 'or' with $zero
+# move $3, $2 is the same as: or $3, $2, $zero
+
+    or $3, $2, $zero   # MOVE using OR
+    # Now $3 = $2 = 42
+
+# Discussion:
+# Also efficient; ‘or’ takes same cycles as ‘add’ on MIPS. This is equally fast and commonly used in practice.
