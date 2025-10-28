@@ -1,0 +1,16 @@
+# ============================================================
+# File: nop_variants.asm
+# Description: Three equivalent ways to perform "no operation"
+# ============================================================
+
+# --- Method 1: Official pseudo-instruction
+nop                # Expands to sll $0, $0, 0
+
+# --- Method 2: Shift zero by zero (native form)
+sll $0, $0, 0      # Shifts $zero left by 0 bits → no effect
+
+# --- Method 3: Add zero to zero (using add instruction)
+add $0, $0, $0     # Adds 0 + 0 → result discarded (since $0 is read-only)
+
+# --- Method 4: OR zero with zero (alternative)
+or  $0, $0, $0     # Bitwise OR of 0 and 0 → still 0, no change
