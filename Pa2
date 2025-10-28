@@ -1,0 +1,56 @@
+# ============================================================
+# File: fibonacci_array.asm
+# Description: Populate an array in memory with Fibonacci numbers
+# ============================================================
+
+.data
+newline: .asciiz "\n"
+
+.text
+.globl main
+
+main:
+    # --------------------------------------------------------
+    # INITIALIZATION
+    # --------------------------------------------------------
+    li $t0, 5           # Number of Fibonacci numbers (N)
+    li $t1, 0x5000      # Starting address of array in memory
+    li $t2, 0           # fib(0)
+    li $t3, 1           # fib(1)
+
+    # --------------------------------------------------------
+    # STORE FIRST TWO NUMBERS
+    # --------------------------------------------------------
+    sw $t2, 0($t1)      # Store 0 at address 5000
+    addi $t1, $t1, 4     # Move to next address
+    addi $t0, $t0, -1    # Decrement counter (N -> N-1)
+
+    beqz $t0, done       # If N was 1, we’re done
+
+    sw $t3, 0($t1)      # Store 1 at address 5004
+    addi $t1, $t1, 4     # Move to next address
+    addi $t0, $t0, -1    # Decrement counter again (N -> N-2)
+
+    # --------------------------------------------------------
+    # GENERATE NEXT FIBONACCI NUMBERS
+    # --------------------------------------------------------
+fib_loop:
+    beqz $t0, done       # Stop when counter hits zero
+
+    add $t4, $t2, $t3    # t4 = t2 + t3 (next Fibonacci number)
+    sw  $t4, 0($t1)      # Store in memory
+
+    # Update registers for next iteration
+    move $t2, $t3        # t2 = previous fib
+    move $t3, $t4        # t3 = current fib
+    addi $t1, $t1, 4      # Advance memory pointer
+    addi $t0, $t0, -1     # Decrement counter
+
+    j fib_loop           # Repeat
+
+# --------------------------------------------------------
+# END PROGRAM
+# --------------------------------------------------------
+done:
+    li $v0, 10           # Exit syscall
+    syscall
